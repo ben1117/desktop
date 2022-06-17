@@ -1,0 +1,363 @@
+# For most projects, this workflow file will not need changing; you simply need
+# to commit it to your repository.
+#
+# You may wish to alter this file to override the set of languages analyzed,
+# or to provide custom queries or build logic.
+#
+# ******** NOTE ********
+# We have attempted to detect the languages in your repository. Please check
+# the `language` matrix defined below to confirm you have the correct set of
+# supported CodeQL languages.
+#
+name: "CodeQL"
+
+on:
+  push:
+    branches: [ "development" ]
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ "development" ]
+  schedule:
+    - cron: '44 21 * * 3'
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'javascript' ]
+        # CodeQL supports [ 'cpp', 'csharp', 'go', 'java', 'javascript', 'python', 'ruby' ]
+        # Learn more about CodeQL language support at https://aka.ms/codeql-docs/language-support
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # Initializes the CodeQL tools for scanning.
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v2
+      with:
+        languages: ${{ matrix.language }}
+        # If you wish to specify custom queries, you can do so here or in a config file.
+        # By default, queries listed here will override any specified in a config file.
+        # Prefix the list here with "+" to use these queries and those in the config file.
+        
+        # Details on CodeQL's query packs refer to : https://docs.github.com/en/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning#using-queries-in-ql-packs
+        # queries: security-extended,security-and-quality
+
+- 名稱：關閉陳舊的問題
+  用途：actions/stale@v5.0.0
+  和：
+    # 存儲庫的令牌。可以使用 `{{ secrets.GITHUB_TOKEN }}` 傳入。
+    repo-token: # 可選，默認為 ${{ github.token }}
+    # 標記問題時要發布的消息。如果未提供，則不會將問題標記為過時。
+    stale-issue-message: # 可選
+    # 標記拉取請求時要發布的消息。如果未提供，則不會將拉取請求標記為過時。
+    stale-pr-message: # 可選
+    # 關閉問題時要發布的消息。如果未提供，則在關閉問題時不會發表評論。
+    close-issue-message: # 可選
+    # 關閉拉取請求時發布的消息。如果未提供，則在關閉拉取請求時不會發表評論。
+    close-pr-message: # 可選
+    # 問題或拉取請求在標記為陳舊之前可以存在的天數。設置為 -1 以從不自動將問題或拉取請求標記為過時。
+    days-before-stale: # 可選，默認為 60
+    # 一個問題在標記為陳舊之前可以存在的天數。設置為 -1 以從不自動將問題標記為過時。僅針對問題覆蓋“days-before-stale”選項。
+    days-before-issue-stale: # 可選
+    # 拉取請求在標記為陳舊之前可以存在的天數。設置為 -1 以從不自動將拉取請求標記為過時。僅針對拉取請求覆蓋“days-before-stale”選項。
+    days-before-pr-stale: # 可選
+    # 在標記為陳舊後等待關閉問題或拉取請求的天數。設置為 -1 以永不關閉過時的問題或拉取請求。
+    days-before-close: # 可選，默認為 7
+    # 標記為陳舊後等待關閉問題的天數。設置為 -1 以永不關閉過時的問題。僅針對問題覆蓋“關閉前幾天”選項。
+    days-before-issue-close: # 可選
+    # 在標記為陳舊後等待關閉拉取請求的天數。設置為 -1 以永不關閉陳舊的拉取請求。僅針對拉取請求覆蓋“關閉前幾天”選項。
+    days-before-pr-close: # 可選
+    # 當問題過時時應用的標籤。
+    stale-issue-label: # 可選，默認為 Stale
+    # 關閉問題時應用的標籤。
+    close-issue-label: # 可選
+    # 表示問題免於被標記為過時的標籤。用逗號分隔多個標籤（例如“label1,label2”）。
+    exclude-issue-labels: # 可選，默認為
+    # 當拉取請求過時時應用的標籤。
+    stale-pr-label: # 可選，默認為 Stale
+    # 關閉拉取請求時應用的標籤。
+    close-pr-label: # 可選
+    # 表示拉取請求不會被標記為過時的標籤。用逗號分隔多個標籤（例如“label1,label2”）。
+    exclude-pr-labels: # 可選，默認為
+    # 表示問題或拉取請求的里程碑不會被標記為過時。用逗號分隔多個里程碑（例如“milestone1,milestone2”）。
+    exclude-milestones: # 可選，默認為
+    # 表示問題免於被標記為過時的里程碑。用逗號分隔多個里程碑（例如“milestone1,milestone2”）。僅針對問題覆蓋“豁免里程碑”選項。
+    豁免問題里程碑：＃可選，默認為
+    # 表示拉取請求免於被標記為過時的里程碑。用逗號分隔多個里程碑（例如“milestone1,milestone2”）。僅針對拉取請求覆蓋“豁免里程碑”選項。
+    exclude-pr-milestones: # 可選，默認為
+    # 免除所有帶有里程碑的問題和拉取請求被標記為陳舊。默認為假。
+    exclude-all-milestones: # 可選，默認為 false
+    # 免除所有帶有里程碑的問題被標記為過時。僅針對問題覆蓋“豁免所有里程碑”選項。
+    exclude-all-issue-milestones: # 可選，默認為
+    # 免除所有具有里程碑的拉取請求被標記為陳舊。僅針對拉取請求覆蓋“豁免所有里程碑”選項。
+    exclude-all-pr-milestones: # 可選，默認為
+    # 僅檢查帶有所有這些標籤的問題或拉取請求是否過時。默認為 ``（禁用）並且可以是逗號分隔的標籤列表。
+    only-labels: # 可選，默認為
+    # 如果過時，僅檢查具有至少一個這些標籤的問題或拉取請求。默認為 ``（禁用）並且可以是逗號分隔的標籤列表。
+    any-of-labels: # 可選，默認為
+    # 如果過時，僅檢查這些標籤中至少有一個的問題。默認為 ``（禁用）並且可以是逗號分隔的標籤列表。僅針對問題覆蓋“任何標籤”選項。
+    any-of-issue-labels: # 可選，默認為
+    # 如果過時，僅檢查具有至少一個這些標籤的拉取請求。默認為 ``（禁用）並且可以是逗號分隔的標籤列表。僅針對拉取請求覆蓋“任何標籤”選項。
+    any-of-pr-labels: # 可選，默認為
+    # 如果過時，只檢查所有這些標籤的問題。默認為 `[]`（禁用），可以是逗號分隔的標籤列表。僅針對問題覆蓋“僅標籤”選項。
+    only-issue-labels: # 可選，默認為
+    # 僅檢查具有所有這些標籤的拉取請求是否過時。默認為 `[]`（禁用），可以是逗號分隔的標籤列表。僅針對拉取請求覆蓋“僅標籤”選項。
+    only-pr-labels: # 可選，默認為
+    # 每次運行的最大操作數，用於控制速率限制（GitHub API CRUD 相關）。
+    每次運行操作：# 可選，默認為 30
+    # 在更新或評論時從問題和拉取請求中刪除過時的標籤。
+    remove-stale-when-updated: # 可選，默認為 true
+    # 當問題被更新或評論時，從問題中刪除陳舊的標籤。僅針對問題覆蓋“remove-stale-when-updated”選項。
+    remove-issue-stale-when-updated: # 可選，默認為
+    # 在更新或評論時從拉取請求中刪除過時的標籤。僅針對拉取請求覆蓋“remove-stale-when-updated”選項。
+    remove-pr-stale-when-updated: # 可選，默認為
+    # 在調試模式下運行處理器，而不實際對實時問題執行任何操作。
+    debug-only: # 可選，默認為 false
+    # 獲取問題或拉取請求的順序。默認為 false，即降序。
+    升序：#可選，默認為false
+    # 關閉陳舊的拉取請求後刪除 git 分支。
+    delete-branch: # 可選，默認為 false
+    # 用於跳過在其之前創建的發布/拉取請求的陳舊操作的日期（ISO 8601 或 RFC 2822）。
+    start-date: # 可選，默認為
+    # 免除問題或拉取請求被標記為過時的受讓人。用逗號分隔多個受讓人（例如“user1,user2”）。
+    exclude-assignees: # 可選，默認為
+    # 使問題免於被標記為過時的受讓人。用逗號分隔多個受讓人（例如“user1,user2”）。僅針對問題覆蓋“豁免受讓人”選項。
+    exclude-issue-assignees: # 可選，默認為
+    # 免除拉取請求被標記為過時的受讓人。用逗號分隔多個受讓人（例如“user1,user2”）。僅針對拉取請求覆蓋“豁免受讓人”選項。
+    exclude-pr-assignees: # 可選，默認為
+    # 免除所有帶有受讓人的問題和拉取請求被標記為過時。默認為假。
+    exclude-all-assignees: # 可選，默認為 false
+    # 免除受讓人的所有問題被標記為過時。僅針對問題覆蓋“豁免所有受讓人”選項。
+    exclude-all-issue-assignees: # 可選，默認為
+    # 免除所有帶有受讓人的拉取請求被標記為陳舊。僅針對拉取請求覆蓋“豁免所有受讓人”選項。
+    exclude-all-pr-assignees: # 可選，默認為
+    # 免除草稿拉取請求被標記為過時。默認為假。
+    exclude-draft-pr: # 可選，默認為 false
+    # 在最後顯示一些關於陳舊工作流的統計信息（僅在啟用日誌時）。
+    enable-statistics: # 可選，默認為 true
+    # 當一個過時的問題或拉取請求接收到活動並從中刪除了 stale-issue-label 或 stale-pr-label 時要添加的以逗號分隔的標籤列表。
+    labels-to-add-when-unstale: # 可選，默認為
+    # 當一個過時的問題或拉取請求接收到活動並從中刪除了 stale-issue-label 或 stale-pr-label 時要刪除的標籤的逗號分隔列表。
+    labels-to-remove-when-unstale: # 可選，默認為
+    # 任何更新（更新/評論）都可以重置問題和拉取請求的陳舊空閒時間。
+    ignore-updates: # 可選，默認為 false
+    # 任何更新（更新/評論）都可以重置問題的過時空閒時間。僅針對問題覆蓋“忽略更新”選項。
+    ignore-issue-updates: # 可選，默認為
+    # 任何更新（更新/評論）都可以重置拉取請求的陳舊空閒時間。覆蓋僅與拉取請求有關的“忽略更新”選項。
+    ignore-pr-updates: # 可選，默認為
+        
+    # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
+    # If this step fails, then you should remove it and run the build manually (see below)
+    - name: Autobuild
+      uses: github/codeql-action/autobuild@v2
+
+- 名稱：安裝 Java JDK
+  用途：actions/setup-java@v3.3.0
+  和：
+    # 要設置的 Java 版本。採用整個或 semver Java 版本。請參閱 README 文件中支持的語法示例
+    java版本：
+    # Java 分發。請參閱 README 文件中支持的發行版列表
+    分配：
+    # 包類型（jdk、jre、jdk+fx、jre+fx）
+    java-package: # 可選，默認為 jdk
+    # 包的架構
+    架構：# 可選，默認為 x64
+    # 壓縮後的JDK所在的路徑
+    jdkFile: # 可選
+    # 如果您希望操作檢查滿足版本規範的最新可用版本，請設置此選項
+    檢查最新：# 可選
+    # pom.xml 文件中distributionManagement 存儲庫的ID。默認是`github`
+    server-id: # 可選，默認為 github
+    # 用於向 Apache Maven 存儲庫進行身份驗證的用戶名的環境變量名稱。默認為 $GITHUB_ACTOR
+    server-username: # 可選，默認為 GITHUB_ACTOR
+    # 用於對 Apache Maven 存儲庫進行身份驗證的密碼或令牌的環境變量名稱。默認為 $GITHUB_TOKEN
+    server-password: # 可選，默認為 GITHUB_TOKEN
+    # settings.xml 文件將被寫入的路徑。默認為 ~/.m2。
+    設置路徑：# 可選
+    # 如果存在，則覆蓋 settings.xml 文件。默認為“真”。
+    overwrite-settings: # 可選，默認為true
+    # 要導入的 GPG 私鑰。默認為空字符串。
+    gpg-private-key: # 可選
+    # GPG 私鑰密碼的環境變量名稱。默認為 $GPG_PASSPHRASE。
+    gpg-passphrase: # 可選
+    # 要緩存依賴項的構建平台的名稱。它可以是“maven”或“gradle”。
+    緩存：#可選
+    # 將作業狀態傳遞給發布作業步驟的解決方法。此變量不適用於手動設置
+    job-status: # 可選，默認為 ${{ job.status }}
+
+    # ℹ️ Command-line programs to run using the OS shell.
+    # 📚 See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsrun
+
+    #   If the Autobuild fails above, remove it and uncomment the following three lines. 
+    #   modify them (or add more) to build your code if your project, please refer to the EXAMPLE below for guidance.
+
+    # - run: |
+    #   echo "Run, Build Application using script"
+    #   ./location_of_script_within_repo/buildscript.sh
+
+- 名稱：設置 Go 環境
+  用途：actions/setup-go@v3.2.0
+  和：
+    # 要下載（如有必要）和使用的 Go 版本。支持 semver 規格和範圍。
+    go-version: # 可選
+    # go.mod 文件的路徑。
+    go-version-file: # 可選
+    # 如果您希望操作始終檢查滿足版本規範的最新可用版本，請將此選項設置為 true
+    檢查最新：# 可選
+    # 用於從 go-versions 中提取節點分佈。由於存在默認值，因此通常不由用戶提供。
+    token: # 可選，默認為 ${{ github.token }}
+    # 用於指定是否需要緩存。如果您想啟用緩存，請設置為 true。
+    緩存：#可選
+    # 用於指定依賴文件的路徑 - go.sum
+    緩存依賴路徑：# 可選
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2
+- 名稱：設置 Node.js 環境
+  使用：actions/setup-node@v3.3.0
+  和：
+    # 在 npmrc 中設置 always-auth。
+    always-auth: # 可選，默認為 false
+    # 要使用的版本的版本規範。示例：12.x、10.15.1、>=10.15.0。
+    節點版本：# 可選
+    # 包含要使用的版本的版本規範的文件。示例：.nvmrc、.node-version。
+    節點版本文件：# 可選
+    # Node 使用的目標架構。示例：x86、x64。默認使用系統架構。
+    架構：#可選
+    # 如果您希望操作檢查滿足版本規範的最新可用版本，請設置此選項。
+    檢查最新：# 可選
+    # 用於設置身份驗證的可選註冊表。將在項目級別的 .npmrc 和 .yarnrc 文件中設置註冊表，並設置身份驗證以從 env.NODE_AUTH_TOKEN 讀取。
+    註冊網址：# 可選
+    # 針對作用域註冊表進行身份驗證的可選作用域。使用 GitHub Packages 註冊表 (https://npm.pkg.github.com/) 時將回退到存儲庫所有者。
+    範圍：#可選
+    # 用於從節點版本中提取節點分佈。由於存在默認值，因此通常不由用戶提供。
+    token: # 可選，默認為 ${{ github.token }}
+    # 用於指定一個包管理器，用於在默認目錄中進行緩存。支持的值：npm、yarn、pnpm。
+    緩存：#可選
+    # 用於指定依賴文件的路徑：package-lock.json、yarn.lock等。支持通配符或文件名列表，用於緩存多個依賴項。
+    緩存依賴路徑：# 可選
+    
+    - 名稱：關閉陳舊的問題
+  用途：actions/stale@v5.0.0
+  和：
+    # 存儲庫的令牌。可以使用 `{{ secrets.GITHUB_TOKEN }}` 傳入。
+    repo-token: # 可選，默認為 ${{ github.token }}
+    # 標記問題時要發布的消息。如果未提供，則不會將問題標記為過時。
+    stale-issue-message: # 可選
+    # 標記拉取請求時要發布的消息。如果未提供，則不會將拉取請求標記為過時。
+    stale-pr-message: # 可選
+    # 關閉問題時要發布的消息。如果未提供，則在關閉問題時不會發表評論。
+    close-issue-message: # 可選
+    # 關閉拉取請求時發布的消息。如果未提供，則在關閉拉取請求時不會發表評論。
+    close-pr-message: # 可選
+    # 問題或拉取請求在標記為陳舊之前可以存在的天數。設置為 -1 以從不自動將問題或拉取請求標記為過時。
+    days-before-stale: # 可選，默認為 60
+    # 一個問題在標記為陳舊之前可以存在的天數。設置為 -1 以從不自動將問題標記為過時。僅針對問題覆蓋“days-before-stale”選項。
+    days-before-issue-stale: # 可選
+    # 拉取請求在標記為陳舊之前可以存在的天數。設置為 -1 以從不自動將拉取請求標記為過時。僅針對拉取請求覆蓋“days-before-stale”選項。
+    days-before-pr-stale: # 可選
+    # 在標記為陳舊後等待關閉問題或拉取請求的天數。設置為 -1 以永不關閉過時的問題或拉取請求。
+    days-before-close: # 可選，默認為 7
+    # 標記為陳舊後等待關閉問題的天數。設置為 -1 以永不關閉過時的問題。僅針對問題覆蓋“關閉前幾天”選項。
+    days-before-issue-close: # 可選
+    # 在標記為陳舊後等待關閉拉取請求的天數。設置為 -1 以永不關閉陳舊的拉取請求。僅針對拉取請求覆蓋“關閉前幾天”選項。
+    days-before-pr-close: # 可選
+    # 當問題過時時應用的標籤。
+    stale-issue-label: # 可選，默認為 Stale
+    # 關閉問題時應用的標籤。
+    close-issue-label: # 可選
+    # 表示問題免於被標記為過時的標籤。用逗號分隔多個標籤（例如“label1,label2”）。
+    exclude-issue-labels: # 可選，默認為
+    # 當拉取請求過時時應用的標籤。
+    stale-pr-label: # 可選，默認為 Stale
+    # 關閉拉取請求時應用的標籤。
+    close-pr-label: # 可選
+    # 表示拉取請求不會被標記為過時的標籤。用逗號分隔多個標籤（例如“label1,label2”）。
+    exclude-pr-labels: # 可選，默認為
+    # 表示問題或拉取請求的里程碑不會被標記為過時。用逗號分隔多個里程碑（例如“milestone1,milestone2”）。
+    exclude-milestones: # 可選，默認為
+    # 表示問題免於被標記為過時的里程碑。用逗號分隔多個里程碑（例如“milestone1,milestone2”）。僅針對問題覆蓋“豁免里程碑”選項。
+    豁免問題里程碑：＃可選，默認為
+    # 表示拉取請求免於被標記為過時的里程碑。用逗號分隔多個里程碑（例如“milestone1,milestone2”）。僅針對拉取請求覆蓋“豁免里程碑”選項。
+    exclude-pr-milestones: # 可選，默認為
+    # 免除所有帶有里程碑的問題和拉取請求被標記為陳舊。默認為假。
+    exclude-all-milestones: # 可選，默認為 false
+    # 免除所有帶有里程碑的問題被標記為過時。僅針對問題覆蓋“豁免所有里程碑”選項。
+    exclude-all-issue-milestones: # 可選，默認為
+    # 免除所有具有里程碑的拉取請求被標記為陳舊。僅針對拉取請求覆蓋“豁免所有里程碑”選項。
+    exclude-all-pr-milestones: # 可選，默認為
+    # 僅檢查帶有所有這些標籤的問題或拉取請求是否過時。默認為 ``（禁用）並且可以是逗號分隔的標籤列表。
+    only-labels: # 可選，默認為
+    # 如果過時，僅檢查具有至少一個這些標籤的問題或拉取請求。默認為 ``（禁用）並且可以是逗號分隔的標籤列表。
+    any-of-labels: # 可選，默認為
+    # 如果過時，僅檢查這些標籤中至少有一個的問題。默認為 ``（禁用）並且可以是逗號分隔的標籤列表。僅針對問題覆蓋“任何標籤”選項。
+    any-of-issue-labels: # 可選，默認為
+    # 如果過時，僅檢查具有至少一個這些標籤的拉取請求。默認為 ``（禁用）並且可以是逗號分隔的標籤列表。僅針對拉取請求覆蓋“任何標籤”選項。
+    any-of-pr-labels: # 可選，默認為
+    # 如果過時，只檢查所有這些標籤的問題。默認為 `[]`（禁用），可以是逗號分隔的標籤列表。僅針對問題覆蓋“僅標籤”選項。
+    only-issue-labels: # 可選，默認為
+    # 僅檢查具有所有這些標籤的拉取請求是否過時。默認為 `[]`（禁用），可以是逗號分隔的標籤列表。僅針對拉取請求覆蓋“僅標籤”選項。
+    only-pr-labels: # 可選，默認為
+    # 每次運行的最大操作數，用於控制速率限制（GitHub API CRUD 相關）。
+    每次運行操作：# 可選，默認為 30
+    # 在更新或評論時從問題和拉取請求中刪除過時的標籤。
+    remove-stale-when-updated: # 可選，默認為 true
+    # 當問題被更新或評論時，從問題中刪除陳舊的標籤。僅針對問題覆蓋“remove-stale-when-updated”選項。
+    remove-issue-stale-when-updated: # 可選，默認為
+    # 在更新或評論時從拉取請求中刪除過時的標籤。僅針對拉取請求覆蓋“remove-stale-when-updated”選項。
+    remove-pr-stale-when-updated: # 可選，默認為
+    # 在調試模式下運行處理器，而不實際對實時問題執行任何操作。
+    debug-only: # 可選，默認為 false
+    # 獲取問題或拉取請求的順序。默認為 false，即降序。
+    升序：#可選，默認為false
+    # 關閉陳舊的拉取請求後刪除 git 分支。
+    delete-branch: # 可選，默認為 false
+    # 用於跳過在其之前創建的發布/拉取請求的陳舊操作的日期（ISO 8601 或 RFC 2822）。
+    start-date: # 可選，默認為
+    # 免除問題或拉取請求被標記為過時的受讓人。用逗號分隔多個受讓人（例如“user1,user2”）。
+    exclude-assignees: # 可選，默認為
+    # 使問題免於被標記為過時的受讓人。用逗號分隔多個受讓人（例如“user1,user2”）。僅針對問題覆蓋“豁免受讓人”選項。
+    exclude-issue-assignees: # 可選，默認為
+    # 免除拉取請求被標記為過時的受讓人。用逗號分隔多個受讓人（例如“user1,user2”）。僅針對拉取請求覆蓋“豁免受讓人”選項。
+    exclude-pr-assignees: # 可選，默認為
+    # 免除所有帶有受讓人的問題和拉取請求被標記為過時。默認為假。
+    exclude-all-assignees: # 可選，默認為 false
+    # 免除受讓人的所有問題被標記為過時。僅針對問題覆蓋“豁免所有受讓人”選項。
+    exclude-all-issue-assignees: # 可選，默認為
+    # 免除所有帶有受讓人的拉取請求被標記為陳舊。僅針對拉取請求覆蓋“豁免所有受讓人”選項。
+    exclude-all-pr-assignees: # 可選，默認為
+    # 免除草稿拉取請求被標記為過時。默認為假。
+    exclude-draft-pr: # 可選，默認為 false
+    # 在最後顯示一些關於陳舊工作流的統計信息（僅在啟用日誌時）。
+    enable-statistics: # 可選，默認為 true
+    # 當一個過時的問題或拉取請求接收到活動並從中刪除了 stale-issue-label 或 stale-pr-label 時要添加的以逗號分隔的標籤列表。
+    labels-to-add-when-unstale: # 可選，默認為
+    # 當一個過時的問題或拉取請求接收到活動並從中刪除了 stale-issue-label 或 stale-pr-label 時要刪除的標籤的逗號分隔列表。
+    labels-to-remove-when-unstale: # 可選，默認為
+    # 任何更新（更新/評論）都可以重置問題和拉取請求的陳舊空閒時間。
+    ignore-updates: # 可選，默認為 false
+    # 任何更新（更新/評論）都可以重置問題的過時空閒時間。僅針對問題覆蓋“忽略更新”選項。
+    ignore-issue-updates: # 可選，默認為
+    # 任何更新（更新/評論）都可以重置拉取請求的陳舊空閒時間。覆蓋僅與拉取請求有關的“忽略更新”選項。
+    ignore-pr-updates: # 可選，默認為
+    
+    - 名稱：第一次互動
+  用途：actions/first-interaction@v1.1.0
+  和：
+    # 存儲庫的令牌。可以使用 {{ secrets.GITHUB_TOKEN }} 傳入
+    回購令牌：
+    # 評論發布個人的第一個問題
+    問題消息：# 可選
+    # 在個人的第一個拉取請求上發表評論
+    公關消息：＃可選
+    
